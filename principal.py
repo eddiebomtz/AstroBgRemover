@@ -6,59 +6,53 @@ Created on Wed Oct 16 10:48:09 2019
 """
 import os
 import argparse
-from imagen import Imagen
-from preprocesamiento import preprocesamiento
-parser = argparse.ArgumentParser(description='Segmentación de objetos extendidos.')
-parser.add_argument("-c", "--recortar", action="store_true", help="Especifica si está en modo para recortar imágenes")
-parser.add_argument("-p", "--preprocesamiento", action="store_true", help="Especifica si está en modo de preprocesamiento de imágenes")
-parser.add_argument("-ef", "--elimina_fondo", action="store_true", help="Especifica si se elimina el fondo")
-parser.add_argument("-zs", "--zscale", action="store_true", help="Especifica si se hará un ajuste de contraste, utilizando el algoritmo de zscale")
-parser.add_argument("-pr", "--percentile_range", action="store_true", help="Especifica si se hará un ajuste de contraste, utilizando el algoritmo de percentile range")
-parser.add_argument("-ap", "--arcsin_percentile", action="store_true", help="Especifica si se hará un ajuste de contraste, utilizando el algoritmo de arcsin percentile")
-parser.add_argument("-apr", "--arcsin_percentile_range", action="store_true", help="Especifica si se hará un ajuste de contraste, utilizando el algoritmo de arcsin percentile range")
-parser.add_argument("-pf", "--pfcm", action="store_true", help="Especifica si desea eliminar el fondo con el algoritmo PFCM")
-parser.add_argument("-d" , "--dir_imagenes", action="store", dest="dir_imagenes", help="directorio de entrada")
-parser.add_argument("-r", "--dir_resultado", action="store", dest="dir_resultado", help="directorio de salida")
-parser.add_argument("-t", "--entrenar", action="store_true", help="Especifica si está en modo para entrenar el modelo")
-parser.add_argument("-re", "--reanudar", action="store_true", help="Especifica si está en modo de reanudar el entrenamiento del modelo")
-parser.add_argument("-k", "--kfold", action="store", dest="kf", help="Especifica un numero entero para el número de k fold en el que se quedó el entrenamiento.")
-parser.add_argument("-s", "--segmentar", action="store_true", help="Especifica si está en modo para segmentar las imágenes de prueba, tomando como base el modelo previamente creado")
-parser.add_argument("-o", "--extendidos", action="store_true", help="Especifica si está utilizando el programa para segmentación de objetos extendidos, debe utilizarse junto con -t o -s")
+from image import image
+from preprocess import preprocess
+parser = argparse.ArgumentParser(description='AstroIMP.')
+parser.add_argument("-c", "--crop", action="store_true", help="Specifies if crop images")
+parser.add_argument("-p", "--preprocess", action="store_true", help="Specifies if preprocess the images")
+parser.add_argument("-ef", "--remove_background", action="store_true", help="Specifies if remove the background")
+parser.add_argument("-zs", "--zscale", action="store_true", help="Specifies if applies contrast enhancement, using the algorithm zscale")
+parser.add_argument("-pr", "--percentile_range", action="store_true", help="Specifies if applies contrast enhancement, using the algorithm percentile range")
+parser.add_argument("-ap", "--arcsin_percentile", action="store_true", help="Specifies if applies contrast enhancement, using the algorithm arcsin percentile")
+parser.add_argument("-apr", "--arcsin_percentile_range", action="store_true", help="Specifies if applies contrast enhancement, using the algorithm arcsin percentile range")
+parser.add_argument("-pf", "--pfcm", action="store_true", help="Specifies if remove the background using the algorithm PFCM")
+parser.add_argument("-d" , "--dir_images", action="store", dest="dir_images", help="Input directory")
+parser.add_argument("-r", "--dir_result", action="store", dest="dir_result", help="Output directory")
 args = parser.parse_args()
-#parser.print_help()
-if args.preprocesamiento:
-    print("Preprocesamiento...")
-    imagenes = os.listdir(args.dir_imagenes)
-    tipo = ""
-    for img in imagenes:
+if args.preprocess:
+    print("Preprocess...")
+    images = os.listdir(args.dir_images)
+    type = ""
+    for img in images:
         print(img)
-        pp = preprocesamiento(args.dir_imagenes + "/" + img, True)
-        pp.guardar_imagen_tif(os.getcwd() + "/" + args.dir_resultado, img + "_original.tif", True)
-        if args.elimina_fondo:
-            print("Elimina fondo...")
-            pp.elimina_fondo()
-            pp.guardar_imagen_tif(os.getcwd() + "/" + args.dir_resultado, img + "_sin_fondo.tif", True)
+        pp = preprocess(args.dir_images + "/" + img, True)
+        pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_original.tif", True)
+        if args.remove_background:
+            print("Removing background...")
+            pp.remove_background()
+            pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_sin_fondo.tif", True)
         if args.zscale:
-            print("Ajuste de contraste con zscale...")
-            pp.autocontraste(1, not args.elimina_fondo)
-            tipo = "zscale"
+            print("Contrast enhancement with zscale...")
+            pp.autocontrast(1, not args.remove_background)
+            #type = "zscale"
         elif args.percentile_range:
-            print("Ajuste de contraste con percentile range...")
-            tipo = "percentile_range"
-            pp.autocontraste(2, not args.elimina_fondo)
+            print("Contrast enhancement with percentile range...")
+            #type = "percentile_range"
+            pp.autocontrast(2, not args.remove_background)
         elif args.arcsin_percentile:
-            print("Ajuste de contraste con arcsin percentile...")
-            tipo = "arcsin_percentile"
-            pp.autocontraste(3, not args.elimina_fondo)
+            print("Contrast enhancement with arcsin percentile...")
+            #type = "arcsin_percentile"
+            pp.autocontrast(3, not args.remove_background)
         elif args.arcsin_percentile_range:
-            print("Ajuste de contraste con arcsin percentile range...")
-            tipo = "arcsin_percentile_range"
-            pp.autocontraste(4, not args.elimina_fondo)
-        pp.guardar_imagen_tif(os.getcwd() + "/" + args.dir_resultado, img + "_" + tipo + ".tif", True)
+            print("Contrast enhancement with arcsin percentile range...")
+            #type = "arcsin_percentile_range"
+            pp.autocontrast(4, not args.remove_background)
+            pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_" + type + ".tif", True)
         if args.pfcm:
-            pp.pfcm_2(args.dir_resultado, img)
-            pp.guardar_imagen_tif(os.getcwd() + "/" + args.dir_resultado, img + "_pfcm.tif", True)
-elif args.recortar:
-    print("Recortar imagenes...")
-    iobj = Imagen()
-    iobj.recortar_imagenes(args.dir_imagenes, args.dir_resultado, 512)
+            pp.pfcm_2(args.dir_result, img)
+            pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_pfcm.tif", True)
+elif args.crop:
+    print("Crop images...")
+    iobj = image()
+    iobj.crop_images(args.dir_images, args.dir_result, 512)
