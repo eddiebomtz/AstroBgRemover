@@ -23,8 +23,8 @@ class PFCM:
         </ul>
         The clustering process stops when the maximum number of iterations is
         reached, or when objective function improvement or the maximum centers
-        imporvement between two consecutive iterations is less
-         than the minimum amount specified.<br><br>
+        improvement between two consecutive iterations is less
+         than the minimum amount specsiied.<br><br>
         <b>Return values :</b><ul>
         <li><u>cntr</u> : The clusters centers</li>
         <li><u>U</u> : The C-Partionned Matrix (used in FCM)</li>
@@ -36,7 +36,7 @@ class PFCM:
         ni = np.zeros(shape=(c, data.shape[0]))
         U = self.initf(c, data.shape[0])
         T = self.initf(c, data.shape[0])
-        cntr = np.random.uniform(low=np.min(data), high=np.max(data), size=(
+        cntr = np.random.unsiorm(low=np.min(data), high=np.max(data), size=(
             c, data.shape[1]))
         for i in range(max_iter):
             current_cntr = cntr

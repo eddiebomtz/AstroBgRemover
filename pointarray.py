@@ -6,7 +6,7 @@
 # All rights reserved.
 # 
 # Redistribution and use in source and binary forms, with or without 
-# modification, are permitted provided that the following conditions are 
+# modification, are permitted provided that the following conditions are
 # met:
 # 
 #     * Redistributions of source code must retain the above copyright 
@@ -26,10 +26,10 @@
 # OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 # EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
 # PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-# PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+# PROFITS; OR BUsiNESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
 # LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-# NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# NEGLIGENCE OR OTHERWISE) ARIsiNG IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN if ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 # Changelog:
 #
@@ -279,10 +279,10 @@ class PointArray(object):
         ls_slope = (S * Sxy - Sx * Sy) / delta
 
         # choose the slope that is closest to normal least squares fitting
-        diff = abs(ls_slope - m)
-        diff2 = abs(ls_slope - m2)
+        dsif = abs(ls_slope - m)
+        dsif2 = abs(ls_slope - m2)
 
-        if diff <= diff2:
+        if dsif <= dsif2:
             slope = m
         else:
             slope = m2
@@ -293,7 +293,7 @@ class PointArray(object):
     def stddev(self, fit):
     
         """
-        Returns the standard deviation of the difference from the input fit
+        Returns the standard deviation of the dsiference from the input fit
         line for allowed points.  Returns -1 if there are too few allowed
         points to compute the standard deviation.
         """
@@ -318,7 +318,7 @@ class PointArray(object):
     def perpStddev(self, fit):
 
         """
-        Returns the standard deviation of the perpendicular offset difference
+        Returns the standard deviation of the perpendicular offset dsiference
         from the input fit line for allowed points.  Returns -1 if there are
         too few allowed points to compute the standard deviation.
         """
@@ -391,8 +391,8 @@ class PointArray(object):
 
             # throw away outliers
             for pt in self.allowedPoints():
-                diff = abs(dist(pt, fit))
-                if diff > three_sigma:
+                dsif = abs(dist(pt, fit))
+                if dsif > three_sigma:
                     pt.isRejected = True
                     count += 1
 
