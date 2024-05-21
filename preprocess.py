@@ -8,10 +8,10 @@ import os
 import cmath
 import warnings
 import pointarray
-import skfuzzy as fuzz
+#import skfuzzy as fuzz
 import skimage.io as io
 from PFCM import PFCM
-from image import image
+from image import ImageManipulation
 from scipy import ndimage
 import skimage.exposure as skie
 from skimage.filters import gaussian
@@ -20,7 +20,7 @@ import numpy as np
 class preprocess:
     def __init__(self, path, tiff):
         if path != None:
-            self.imageobj = image()
+            self.imageobj = ImageManipulation()
             if tiff:
                 self.image = self.imageobj.read_tiff(path)
             else:

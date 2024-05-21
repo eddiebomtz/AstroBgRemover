@@ -6,7 +6,7 @@ Created on Wed Oct 16 10:48:09 2019
 """
 import os
 import argparse
-from image import image
+from image import ImageManipulation
 from preprocess import preprocess
 parser = argparse.ArgumentParser(description='AstroIMP.')
 parser.add_argument("-c", "--crop", action="store_true", help="Specifies if crop images")
@@ -17,6 +17,7 @@ parser.add_argument("-pr", "--percentile_range", action="store_true", help="Spec
 parser.add_argument("-ap", "--arcsin_percentile", action="store_true", help="Specifies if applies contrast enhancement, using the algorithm arcsin percentile")
 parser.add_argument("-apr", "--arcsin_percentile_range", action="store_true", help="Specifies if applies contrast enhancement, using the algorithm arcsin percentile range")
 parser.add_argument("-pf", "--pfcm", action="store_true", help="Specifies if remove the background using the algorithm PFCM")
+parser.add_argument("-ccde", "--ccd_errors", action="store_true", help="Specifies if you want to reduce CCD errors")
 parser.add_argument("-d" , "--dir_images", action="store", dest="dir_images", help="Input directory")
 parser.add_argument("-r", "--dir_result", action="store", dest="dir_result", help="Output directory")
 args = parser.parse_args()
@@ -52,7 +53,9 @@ if args.preprocess:
         if args.pfcm:
             pp.pfcm_2(args.dir_result, img)
             pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_pfcm.tif", True)
+        if args.ccd_errors:
+            pp.ccd_error(args.dir_images, args.dir_result)
 elif args.crop:
     print("Crop images...")
-    iobj = image()
+    iobj = ImageManipulation()
     iobj.crop_images(args.dir_images, args.dir_result, 512)

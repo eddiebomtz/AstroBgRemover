@@ -6,8 +6,8 @@ Created on Fri Jul 17 21:00:13 2020
 """
 
 import os
-from image import image
-imageobj = image()
+from image import ImageManipulation
+imageobj = ImageManipulation()
 for count, path_name in enumerate(os.listdir("train/fits")): 
     image, header = imageobj.read_fits("train/fits/" + path_name)
     run = header["run"]

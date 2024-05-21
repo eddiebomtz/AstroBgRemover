@@ -10,7 +10,7 @@ import skimage.io as io
 from astropy.io import fits
 import matplotlib.pyplot as plt
 from PIL import Image
-class image:
+class ImageManipulation:
     def create_directory(self, path):
         try:
             os.stat(path)
