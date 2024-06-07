@@ -31,7 +31,11 @@ if args.preprocess:
     type = ""
     for img in images:
         print(img)
-        pp = preprocess(args.dir_images + "/" + img, True)
+        path = os.path.splitext(img)
+        if path[1] == ".fits":
+            pp = preprocess(args.dir_images + "/" + img, False)
+        else:
+            pp = preprocess(args.dir_images + "/" + img, True)
         pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_original", True)
         if args.remove_background:
             print("Removing background...")
