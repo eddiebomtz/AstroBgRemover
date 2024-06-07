@@ -29,7 +29,7 @@ if args.preprocess:
     print("Preprocess...")
     images = os.listdir(args.dir_images)
     type = ""
-    use_processed = False
+    use_original = True
     for img in images:
         print(img)
         path = os.path.splitext(img)
@@ -44,31 +44,31 @@ if args.preprocess:
             pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_sin_fondo.tif", True) 
         if args.pfcm:
             pp.pfcm_2(args.dir_result, img)
-            use_processed = True
+            use_original = False
             pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_pfcm.tif", True)
         if args.ccd_errors:
             pp.ccd_error(args.dir_images, args.dir_result)
-            use_processed = True
+            use_original = False
             
         if args.zscale:
             print("Contrast enhancement with zscale...")
-            pp.autocontrast(1, use_processed)
+            pp.autocontrast(1, use_original)
             pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_zscale_" + type, True)
             #type = "zscale"
         elif args.percentile_range:
             print("Contrast enhancement with percentile range...")
             #type = "percentile_range"
-            pp.autocontrast(2, use_processed)
+            pp.autocontrast(2, use_original)
             pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_percentile_" + type, True)
         elif args.arcsin_percentile:
             print("Contrast enhancement with arcsin percentile...")
             #type = "arcsin_percentile"
-            pp.autocontrast(3, use_processed)
+            pp.autocontrast(3, use_original)
             pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_arcsin_percentile_" + type, True)
         elif args.arcsin_percentile_range:
             print("Contrast enhancement with arcsin percentile range...")
             #type = "arcsin_percentile_range"
-            pp.autocontrast(4, use_processed)
+            pp.autocontrast(4, use_original)
             pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_arcsin_percentile_range_" + type, True)
 elif args.crop:
     print("Crop images...")
