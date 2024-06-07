@@ -8,6 +8,10 @@ import os
 import argparse
 from image import ImageManipulation
 from preprocess import preprocess
+import sys
+if not sys.warnoptions:
+    import warnings
+    warnings.simplefilter("ignore")
 parser = argparse.ArgumentParser(description='AstroIMP.')
 parser.add_argument("-c", "--crop", action="store_true", help="Specifies if crop images")
 parser.add_argument("-p", "--preprocess", action="store_true", help="Specifies if preprocess the images")
@@ -28,7 +32,7 @@ if args.preprocess:
     for img in images:
         print(img)
         pp = preprocess(args.dir_images + "/" + img, True)
-        pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_original.tif", True)
+        pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_original", True)
         if args.remove_background:
             print("Removing background...")
             pp.remove_background()
@@ -36,20 +40,23 @@ if args.preprocess:
         if args.zscale:
             print("Contrast enhancement with zscale...")
             pp.autocontrast(1, not args.remove_background)
+            pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_zscale_" + type, True)
             #type = "zscale"
         elif args.percentile_range:
             print("Contrast enhancement with percentile range...")
             #type = "percentile_range"
             pp.autocontrast(2, not args.remove_background)
+            pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_percentile_" + type, True)
         elif args.arcsin_percentile:
             print("Contrast enhancement with arcsin percentile...")
             #type = "arcsin_percentile"
             pp.autocontrast(3, not args.remove_background)
+            pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_arcsin_percentile_" + type, True)
         elif args.arcsin_percentile_range:
             print("Contrast enhancement with arcsin percentile range...")
             #type = "arcsin_percentile_range"
             pp.autocontrast(4, not args.remove_background)
-            pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_" + type + ".tif", True)
+            pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_arcsin_percentile_range_" + type, True)
         if args.pfcm:
             pp.pfcm_2(args.dir_result, img)
             pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_pfcm.tif", True)

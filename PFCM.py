@@ -36,7 +36,7 @@ class PFCM:
         ni = np.zeros(shape=(c, data.shape[0]))
         U = self.initf(c, data.shape[0])
         T = self.initf(c, data.shape[0])
-        cntr = np.random.unsiorm(low=np.min(data), high=np.max(data), size=(
+        cntr = np.random.uniform(low=np.min(data), high=np.max(data), size=(
             c, data.shape[1]))
         for i in range(max_iter):
             current_cntr = cntr

@@ -227,8 +227,8 @@ class preprocess:
             ax2.set_title("Iteration 0")
             fig.canvas.draw()
         for ii in np.arange(1,niter):
-            deltaS[:-1,: ] = np.dsif(imgout,axis=0)
-            deltaE[: ,:-1] = np.dsif(imgout,axis=1)
+            deltaS[:-1,: ] = np.diff(imgout,axis=0)
+            deltaE[: ,:-1] = np.diff(imgout,axis=1)
             if 0<sigma:
                 deltaSf=gaussian(deltaS,sigma);
                 deltaEf=gaussian(deltaE,sigma);
@@ -404,9 +404,9 @@ class preprocess:
             I = 2 * ((im - im.min()) / (im.max() - im.min())) - 1
             sigma = mad_std(I)
             I = self.anisotropic_difussion(I,100,80,0.075,(1,1),sigma,2)
-            I = (I - I.min()) / (I.max() - I.min())
-            self.processed_image = self.processed_image.astype("uint16")
+            self.processed_image = I.astype("uint16")
             self.save_image_tiff(path, name + "_anisotropic_difussion.tif", True)
+            I = (I - I.min()) / (I.max() - I.min())
         else:
             I = (im - im.min()) / (im.max() - im.min()) 
             if median:
@@ -417,15 +417,14 @@ class preprocess:
         I = I.reshape(x * y, 1)
         pfcm = PFCM()
         centers, U, T, obj_fcn = pfcm.pfcm(I, 2, a = 1, b = 2, nc = 2)
-        
-        colors = []
+        '''colors = []
         cluster_colors = {0:np.array([255,0,0]),1:np.array([0,255,0])}
         for n in range(I.shape[0]):
             color = np.zeros([2])
             for c in range(U.shape[0]):
                 color += cluster_colors[c]*U[c,n]
             colors.append(color)
-        
+        '''
         labels = np.argmax(U, axis=0).reshape(im.shape[0], im.shape[1])
         I = I.reshape(im.shape[0], im.shape[1])
         label0 = I[labels == 0]
@@ -448,7 +447,7 @@ class preprocess:
         binary_image = imglabel * self.image
         binary_image = binary_image.astype("uint16")
         self.processed_image = binary_image
-        self.save_image_tiff(path, name + "_pfcm", True)
+        #self.save_image_tiff(path, name + "_pfcm", True)
     def dice(self, pred, true, k = 1):
         intersection = np.sum(pred[true==k]) * 2.0
         dice = intersection / (np.sum(pred) + np.sum(true))
