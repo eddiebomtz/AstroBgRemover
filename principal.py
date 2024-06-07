@@ -29,6 +29,7 @@ if args.preprocess:
     print("Preprocess...")
     images = os.listdir(args.dir_images)
     type = ""
+    use_processed = False
     for img in images:
         print(img)
         path = os.path.splitext(img)
@@ -40,32 +41,35 @@ if args.preprocess:
         if args.remove_background:
             print("Removing background...")
             pp.remove_background()
-            pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_sin_fondo.tif", True)
+            pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_sin_fondo.tif", True) 
+        if args.pfcm:
+            pp.pfcm_2(args.dir_result, img)
+            use_processed = True
+            pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_pfcm.tif", True)
+        if args.ccd_errors:
+            pp.ccd_error(args.dir_images, args.dir_result)
+            use_processed = True
+            
         if args.zscale:
             print("Contrast enhancement with zscale...")
-            pp.autocontrast(1, not args.remove_background)
+            pp.autocontrast(1, use_processed)
             pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_zscale_" + type, True)
             #type = "zscale"
         elif args.percentile_range:
             print("Contrast enhancement with percentile range...")
             #type = "percentile_range"
-            pp.autocontrast(2, not args.remove_background)
+            pp.autocontrast(2, use_processed)
             pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_percentile_" + type, True)
         elif args.arcsin_percentile:
             print("Contrast enhancement with arcsin percentile...")
             #type = "arcsin_percentile"
-            pp.autocontrast(3, not args.remove_background)
+            pp.autocontrast(3, use_processed)
             pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_arcsin_percentile_" + type, True)
         elif args.arcsin_percentile_range:
             print("Contrast enhancement with arcsin percentile range...")
             #type = "arcsin_percentile_range"
-            pp.autocontrast(4, not args.remove_background)
+            pp.autocontrast(4, use_processed)
             pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_arcsin_percentile_range_" + type, True)
-        if args.pfcm:
-            pp.pfcm_2(args.dir_result, img)
-            pp.save_image_tiff(os.getcwd() + "/" + args.dir_result, img + "_pfcm.tif", True)
-        if args.ccd_errors:
-            pp.ccd_error(args.dir_images, args.dir_result)
 elif args.crop:
     print("Crop images...")
     iobj = ImageManipulation()
