@@ -26,7 +26,6 @@ Usage:
 - Specifies if applies contrast enhancement, using the algorithm arcsin percentile range: -apr or --arcsin_percentile_range
 - Specifies if remove the background using the algorithm PFCM: -pf or --pfcm
 
-
-
+Documentation with examples is available in english and spanish versions. 
 
 
