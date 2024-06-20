@@ -28,4 +28,4 @@ Usage:
 
 Documentation with examples is available in english and spanish versions. 
 
-
+AstroIMP is now registered in INDAUTOR. 
